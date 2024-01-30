@@ -10,7 +10,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
@@ -55,6 +57,7 @@ public class Login extends JFrame {
 	 * Create the frame.
 	 */
 	public Login() {
+		setTitle("Login Panel");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1038, 703);
 		contentPane = new JPanel();
@@ -124,6 +127,7 @@ public class Login extends JFrame {
 		button_1.setFont(new Font("Dialog", Font.BOLD, 12));
 		button_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				dispose();
 				new Signup().setVisible(true);
 			}
 		});
@@ -158,71 +162,65 @@ public class Login extends JFrame {
 		
 		lblNewLabel_4.setBounds(608, 294, 65, 61);
 		panel.add(lblNewLabel_4);
+	
 		
 		JButton btnNewButton = new JButton("Login");
-		btnNewButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				String username = user_text.getText();
-				String password = passwordField.getText();
-				String value = comboBox.getSelectedItem().toString();
-				
-				if(!username.equals("")&&(!password.equals(""))&&(!value.equals(""))) {
-					Connection con;
-					String url="jdbc:mysql://localhost:3306/cms";
-					String username1 = "root";
-					String passwords="";
-					
-						
-						try {
-							con=DriverManager.getConnection(url,username1,passwords);
-							Statement st = con.createStatement();
-							
-							String selectQuery = "SELECT * FROM course WHERE Username = '"+username+"' AND Password = '"+password+"' AND mode = '"+value+"'";
-							
-							ResultSet rs = st.executeQuery(selectQuery);
-							if(rs.next()) {
-								JOptionPane.showMessageDialog(null, "Login Sucessfully!!!");
-								
-								switch(value) {
-								case "Student":
-									new Student().setVisible(true);
-									break;
-								case "Admin":
-									new Admin().setVisible(true);
-									break;
-								case "Teacher":
-									new Teacher().setVisible(true);
-									break;
-								default:
-									JOptionPane.showMessageDialog(null, "Unsupported User Mode:"+value);
-								
-									
-								}
-							}
-							else {
-								JOptionPane.showMessageDialog(null, "DataBase value did not matched");
-							}
-						
-							
-						}catch(Exception ee) {
-							System.out.println(ee);;
-						}
-					}
-						
-					
-					
-			
-					else {
-						JOptionPane.showMessageDialog(null, "Login denied!");
-					}
-					
-					
-			
-			}	
-				
-			
+		btnNewButton.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        String username = user_text.getText();
+		        String password = passwordField.getText();
+		        String value = comboBox.getSelectedItem().toString();
+
+		        if (!username.isEmpty() && !password.isEmpty() && !value.isEmpty()) {
+		            try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cms", "root", "");
+		                 PreparedStatement statement = con.prepareStatement(
+		                         "SELECT * FROM signup WHERE Username = ? AND Password = ? AND mode = ?")) {
+
+		                statement.setString(1, username);
+		                statement.setString(2, password);
+		                statement.setString(3, value);
+
+		                try (ResultSet rs = statement.executeQuery()) {
+		                    if (rs.next()) {
+		                        switch (value) {
+		                            case "Admin":
+		                            	
+		                            	dispose();
+		                				new Admin().setVisible(true);
+		                                break;
+		                            case "Teacher":
+		                                // Open Teacher dashboard and display information
+		                                Teacher teacherDashboard = new Teacher(username);
+//		                                teacherDashboard.displayInformation();
+		                                teacherDashboard.setVisible(true);
+		                                dispose(); // Close the login frame
+		                                break;
+		                            case "Student":
+		                            	 Student stu = new Student(username);
+//			                                stu.displayInformation();
+			                                stu.setVisible(true);
+			                                dispose();
+		                                
+		                                break;
+		                            default:
+		                                JOptionPane.showMessageDialog(null, "Invalid user type");
+		                        }
+		                    } else {
+		                        JOptionPane.showMessageDialog(null, "Invalid credentials");
+		                    }
+		                }
+		            } catch (SQLException ex) {
+		                ex.printStackTrace();
+		                JOptionPane.showMessageDialog(null, "Error connecting to the database");
+		            }
+		        } else {
+		            JOptionPane.showMessageDialog(null, "Please enter valid credentials");
+		        }
+		    }
 		});
+
+
+				
 		btnNewButton.setFont(new Font("Segoe UI Black", Font.BOLD, 14));
 		btnNewButton.setBackground(new Color(30, 144, 255));
 		btnNewButton.setForeground(Color.white);
@@ -246,6 +244,6 @@ public class Login extends JFrame {
 		panel.add(lblNewLabel_6);
 //		new ImageIcon(Login.class.getResource("/CMS/image/fimage12.png"))
 
-		
+	
 	}
 }

@@ -6,11 +6,18 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.Panel;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
 import java.awt.Color;
@@ -20,6 +27,10 @@ public class Student extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+	private static String username;
+	private JLabel lblNewLabel_4_1;
+	private JLabel lblNewLabel_4_1_1;
+	private JLabel lblNewLabel_6_1;
 
 	/**
 	 * Launch the application.
@@ -28,7 +39,7 @@ public class Student extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Student frame = new Student();
+					Student frame = new Student(username);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -40,7 +51,9 @@ public class Student extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Student() {
+	public Student(String username) {
+		this.username = username;
+		setTitle("Student Panel");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1034, 690);
 		contentPane = new JPanel();
@@ -56,7 +69,7 @@ public class Student extends JFrame {
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("Welcome, Pujan Pant !");
+		JLabel lblNewLabel = new JLabel("Welcome, Student");
 		lblNewLabel.setFont(new Font("Times New Roman", Font.BOLD, 35));
 		lblNewLabel.setBounds(349, 28, 351, 51);
 		panel.add(lblNewLabel);
@@ -96,6 +109,9 @@ public class Student extends JFrame {
         btnNewButton.setOpaque(false);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				dispose();
+				new StudentDa().setVisible(true);
+			    
 			}
 		});
 		btnNewButton.setBounds(46, 54, 205, 30);
@@ -110,6 +126,8 @@ public class Student extends JFrame {
         btnNewButton_1.setOpaque(false);
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				dispose();
+				new StudentTe().setVisible(true);
 			}
 		});
 		btnNewButton_1.setBounds(33, 129, 205, 30);
@@ -124,6 +142,8 @@ public class Student extends JFrame {
         btnNewButton_2.setOpaque(false);
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				dispose();
+				new StudentMo().setVisible(true);
 			}
 		});
 		btnNewButton_2.setBounds(33, 198, 205, 30);
@@ -138,6 +158,8 @@ public class Student extends JFrame {
         btnNewButton_3.setOpaque(false);
 		btnNewButton_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				dispose();
+				new StudentAs().setVisible(true);
 			}
 		});
 		btnNewButton_3.setBounds(46, 272, 205, 30);
@@ -151,7 +173,15 @@ public class Student extends JFrame {
         btnNewButton_4.setOpaque(false);
 		btnNewButton_4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if(e.getSource()==btnNewButton_4) {
+					int a=JOptionPane.showConfirmDialog(contentPane,"Are you sure?");
+				    if(a==JOptionPane.YES_OPTION) {
+				    	dispose();
+				    	Login obj=new Login();
+				    	obj.setVisible(true);
+				    }
 				
+				}
 				
 			}
 		});
@@ -160,6 +190,12 @@ public class Student extends JFrame {
 		panel_1.add(btnNewButton_4);
 		
 		JButton btnNewButton_5 = new JButton("Marks");
+		btnNewButton_5.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				new StudentMa().setVisible(true);
+			}
+		});
 		btnNewButton_5.setForeground(new Color(255, 255, 255));
 		btnNewButton_5.setFont(new Font("Times New Roman", Font.BOLD, 28));
 		btnNewButton_5.setBorderPainted(false); 
@@ -190,49 +226,89 @@ public class Student extends JFrame {
 		lblNewLabel_1.setBounds(349, 159, 200, 30);
 		panel.add(lblNewLabel_1);
 		
-		Panel panel_3 = new Panel();
-		panel_3.setBounds(349, 222, 613, 400);
+		JPanel panel_3 = new JPanel();
+		panel_3.setBackground(new Color(255, 255, 255));
+		panel_3.setBorder(new LineBorder(new Color(100, 149, 237), 3));
+		panel_3.setBounds(349, 229, 618, 315);
 		panel.add(panel_3);
 		panel_3.setLayout(null);
 		
-		JLabel lblNewLabel_2 = new JLabel("Student ID:");
-		lblNewLabel_2.setFont(new Font("Times New Roman", Font.BOLD, 25));
-		lblNewLabel_2.setBounds(63, 100, 203, 25);
+//		JLabel lblNewLabel_5 = new JLabel("");
+//		lblNewLabel_5.setFont(new Font("Times New Roman", Font.BOLD, 25));
+//		lblNewLabel_5.setBounds(234, 177, 203, 25);
+//		panel_3.add(lblNewLabel_5);
+		
+		JLabel lblNewLabel_6_1 = new JLabel("");
+		lblNewLabel_6_1.setFont(new Font("Times New Roman", Font.BOLD, 25));
+		lblNewLabel_6_1.setBounds(189, 227, 125, 25);
+		panel_3.add(lblNewLabel_6_1);
+		
+//		JLabel lblNewLabel_4 = new JLabel("");
+//		lblNewLabel_4.setFont(new Font("Times New Roman", Font.BOLD, 25));
+//		lblNewLabel_4.setBounds(234, 52, 203, 25);
+//		panel_3.add(lblNewLabel_4);
+		
+		JLabel lblNewLabel_4_1 = new JLabel("");
+		lblNewLabel_4_1.setFont(new Font("Times New Roman", Font.BOLD, 25));
+		lblNewLabel_4_1.setBounds(201, 102, 203, 25);
+		panel_3.add(lblNewLabel_4_1);
+		
+		JLabel lblNewLabel_4_1_1 = new JLabel("");
+		lblNewLabel_4_1_1.setFont(new Font("Times New Roman", Font.BOLD, 25));
+		lblNewLabel_4_1_1.setBounds(201, 165, 203, 25);
+		panel_3.add(lblNewLabel_4_1_1);
+		
+		JLabel lblNewLabel_2 = new JLabel("Student Name:");
+		lblNewLabel_2.setFont(new Font("Times New Roman", Font.BOLD, 20));
+		lblNewLabel_2.setBounds(54, 102, 138, 25);
 		panel_3.add(lblNewLabel_2);
 		
-		JLabel lblNewLabel_3 = new JLabel("Student Name:");
-		lblNewLabel_3.setFont(new Font("Times New Roman", Font.BOLD, 25));
-		lblNewLabel_3.setBounds(63, 152, 203, 25);
+		JLabel lblNewLabel_3 = new JLabel("Phone Number:");
+		lblNewLabel_3.setFont(new Font("Times New Roman", Font.BOLD, 20));
+		lblNewLabel_3.setBounds(54, 165, 138, 25);
 		panel_3.add(lblNewLabel_3);
 		
-		JLabel lblNewLabel_4 = new JLabel("Student Group:");
-		lblNewLabel_4.setFont(new Font("Times New Roman", Font.BOLD, 25));
-		lblNewLabel_4.setBounds(63, 202, 203, 25);
+		JLabel lblNewLabel_4 = new JLabel("Module Name:");
+		lblNewLabel_4.setFont(new Font("Times New Roman", Font.BOLD, 20));
+		lblNewLabel_4.setBounds(54, 227, 138, 25);
 		panel_3.add(lblNewLabel_4);
 		
-		JLabel lblNewLabel_5 = new JLabel("Phone Number:");
-		lblNewLabel_5.setFont(new Font("Times New Roman", Font.BOLD, 25));
-		lblNewLabel_5.setBounds(63, 253, 203, 25);
-		panel_3.add(lblNewLabel_5);
+//		JLabel lblNewLabel_4_1_2 = new JLabel("");
+//		lblNewLabel_4_1_2.setFont(new Font("Times New Roman", Font.BOLD, 25));
+//		lblNewLabel_4_1_2.setBounds(234, 239, 203, 25);
+//		panel_3.add(lblNewLabel_4_1_2);
 		
-		JLabel lblNewLabel_11 = new JLabel("2330509");
-		lblNewLabel_11.setFont(new Font("Times New Roman", Font.BOLD, 25));
-		lblNewLabel_11.setBounds(198, 100, 203, 25);
-		panel_3.add(lblNewLabel_11);
 		
-		JLabel lblNewLabel_12 = new JLabel("Pujan Pant");
-		lblNewLabel_12.setFont(new Font("Times New Roman", Font.BOLD, 25));
-		lblNewLabel_12.setBounds(230, 152, 203, 25);
-		panel_3.add(lblNewLabel_12);
-		
-		JLabel lblNewLabel_13 = new JLabel("L5CG2");
-		lblNewLabel_13.setFont(new Font("Times New Roman", Font.BOLD, 25));
-		lblNewLabel_13.setBounds(241, 202, 203, 25);
-		panel_3.add(lblNewLabel_13);
-		
-		JLabel lblNewLabel_14 = new JLabel("9869671443");
-		lblNewLabel_14.setFont(new Font("Times New Roman", Font.BOLD, 25));
-		lblNewLabel_14.setBounds(241, 253, 203, 25);
-		panel_3.add(lblNewLabel_14);
+	
+	
+		try {
+
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/cms", "root",
+                    "");
+
+            String query = "SELECT Username, phone_number, Course FROM signup WHERE Username = ?";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, username);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                String name = resultSet.getString("Username");
+                String phoneNumber = resultSet.getString("phone_number");
+                String module = resultSet.getString("Course");
+
+                lblNewLabel_4_1.setText(name);
+                lblNewLabel_4_1_1.setText(phoneNumber);
+                lblNewLabel_6_1.setText(module);
+            }
+
+            resultSet.close();
+            preparedStatement.close();
+            connection.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 	}
 }

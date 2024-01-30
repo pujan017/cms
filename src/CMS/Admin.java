@@ -6,6 +6,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Color;
 import java.awt.Font;
 import javax.swing.JButton;
@@ -13,6 +15,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.border.LineBorder;
 import javax.swing.ImageIcon;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.border.MatteBorder;
 
 public class Admin extends JFrame {
 
@@ -63,6 +73,8 @@ public class Admin extends JFrame {
 		JButton btnNewButton_6 = new JButton("Dashboard");
 		btnNewButton_6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				dispose();
+				new AdminDa().setVisible(true);
 			}
 		});
 		btnNewButton_6.setBounds(72, 80, 205, 30);
@@ -167,6 +179,8 @@ public class Admin extends JFrame {
 		JButton btnNewButton_1_1 = new JButton("Teachers");
 		btnNewButton_1_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				dispose();
+				new AdminTe().setVisible(true);
 			}
 		});
 		btnNewButton_1_1.setOpaque(false);
@@ -178,23 +192,20 @@ public class Admin extends JFrame {
 		btnNewButton_1_1.setBounds(60, 157, 205, 30);
 		panel_1.add(btnNewButton_1_1);
 		
-		JButton btnNewButton_2_1 = new JButton("Modules");
-		btnNewButton_2_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnNewButton_2_1.setOpaque(false);
-		btnNewButton_2_1.setForeground(Color.WHITE);
-		btnNewButton_2_1.setFont(new Font("Times New Roman", Font.BOLD, 28));
-		btnNewButton_2_1.setFocusPainted(false);
-		btnNewButton_2_1.setContentAreaFilled(false);
-		btnNewButton_2_1.setBorderPainted(false);
-		btnNewButton_2_1.setBounds(60, 428, 205, 30);
-		panel_1.add(btnNewButton_2_1);
+
 		
 		JButton btnNewButton_4_1 = new JButton("Log Out");
 		btnNewButton_4_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if(e.getSource()==btnNewButton_4_1) {
+					int a=JOptionPane.showConfirmDialog(contentPane,"Are you sure?");
+				    if(a==JOptionPane.YES_OPTION) {
+				    	dispose();
+				    	Login obj=new Login();
+				    	obj.setVisible(true);
+				    }
+				
+				}
 			}
 		});
 		btnNewButton_4_1.setOpaque(false);
@@ -214,6 +225,8 @@ public class Admin extends JFrame {
 		JButton btnNewButton_7 = new JButton("Students");
 		btnNewButton_7.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				dispose();
+				new AdminStu().setVisible(true);
 			}
 		});
 		btnNewButton_7.setForeground(new Color(255, 255, 255));
@@ -228,6 +241,8 @@ public class Admin extends JFrame {
 		JButton btnNewButton_8 = new JButton("Courses");
 		btnNewButton_8.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				dispose();
+				new AdminCo().setVisible(true);
 			}
 		});
 		btnNewButton_8.setForeground(new Color(255, 255, 255));
@@ -248,6 +263,8 @@ public class Admin extends JFrame {
         btnNewButton_9.setOpaque(false);
 		btnNewButton_9.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				dispose();
+				new AdminRe().setVisible(true);
 			}
 		});
 		btnNewButton_9.setBounds(49, 366, 205, 30);
@@ -273,11 +290,6 @@ public class Admin extends JFrame {
 		lblNewLabel_3.setBounds(42, 352, 45, 45);
 		panel_1.add(lblNewLabel_3);
 		
-		JLabel lblNewLabel_4 = new JLabel("");
-		lblNewLabel_4.setIcon(new ImageIcon(Admin.class.getResource("/CMS/icon/training (1).png")));
-		lblNewLabel_4.setBounds(42, 417, 45, 41);
-		panel_1.add(lblNewLabel_4);
-		
 		JLabel lblNewLabel_5 = new JLabel("");
 		lblNewLabel_5.setIcon(new ImageIcon(Admin.class.getResource("/CMS/icon/logout2 (1).png")));
 		lblNewLabel_5.setBounds(42, 568, 45, 41);
@@ -296,40 +308,209 @@ public class Admin extends JFrame {
 		panel_2.add(lblWelcomeAdmin);
 		
 		JPanel panel_3 = new JPanel();
-		panel_3.setBorder(new LineBorder(new Color(100, 149, 237)));
+		panel_3.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				dispose();
+				new AdminStu().setVisible(true);
+			}
+		});
+		panel_3.setBorder(new MatteBorder(1, 1, 5, 5, (Color) new Color(100, 149, 237)));
 		panel_3.setBackground(new Color(255, 255, 255));
 		panel_3.setBounds(383, 184, 237, 146);
 		panel.add(panel_3);
 		panel_3.setLayout(null);
 		
-		JLabel lblNewLabel_11 = new JLabel("     15   \r\nStudents");
+		JLabel lblNewLabel_11 = new JLabel("Students");
 		lblNewLabel_11.setFont(new Font("Times New Roman", Font.BOLD, 25));
-		lblNewLabel_11.setBounds(23, 43, 181, 67);
+		lblNewLabel_11.setBounds(63, 10, 104, 67);
 		panel_3.add(lblNewLabel_11);
 		
+		JLabel lblNewLabel_11_1 = new JLabel("");
+		lblNewLabel_11_1.setBounds(73, 69, 104, 67);
+		panel_3.add(lblNewLabel_11_1);
+		lblNewLabel_11_1.setFont(new Font("Times New Roman", Font.BOLD, 25));
+		 int studentCount = getStudentCount();
+	      lblNewLabel_11_1.setText(Integer.toString(studentCount));
+		
+		
 		JPanel panel_4 = new JPanel();
-		panel_4.setBorder(new LineBorder(new Color(100, 149, 237)));
+		panel_4.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				dispose();
+				new AdminTe().setVisible(true);
+			}
+		});
+		panel_4.setBorder(new MatteBorder(1, 1, 5, 5, (Color) new Color(100, 149, 237)));
 		panel_4.setBackground(new Color(255, 255, 255));
 		panel_4.setBounds(706, 184, 237, 146);
 		panel.add(panel_4);
 		panel_4.setLayout(null);
 		
-		JLabel lblNewLabel_12 = new JLabel("14 Teachers");
+		JLabel lblNewLabel_12 = new JLabel("Teachers");
 		lblNewLabel_12.setFont(new Font("Times New Roman", Font.BOLD, 25));
-		lblNewLabel_12.setBounds(46, 43, 181, 67);
+		lblNewLabel_12.setBounds(49, 10, 109, 67);
 		panel_4.add(lblNewLabel_12);
 		
+		JLabel lblNewLabel_12_1 = new JLabel("");
+		lblNewLabel_12_1.setBounds(59, 69, 109, 67);
+		panel_4.add(lblNewLabel_12_1);
+		lblNewLabel_12_1.setFont(new Font("Times New Roman", Font.BOLD, 25));
+        int teacherCount = getTeacherCount();
+        lblNewLabel_12_1.setText(Integer.toString(teacherCount));
+		
 		JPanel panel_5 = new JPanel();
-		panel_5.setBorder(new LineBorder(new Color(100, 149, 237)));
+		panel_5.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				dispose();
+				new AdminCo().setVisible(true);
+			}
+		});
+		panel_5.setBorder(new MatteBorder(1, 1, 5, 5, (Color) new Color(100, 149, 237)));
 		panel_5.setBackground(new Color(255, 255, 255));
 		panel_5.setBounds(556, 396, 237, 146);
 		panel.add(panel_5);
 		panel_5.setLayout(null);
 		
-		JLabel lblNewLabel_13 = new JLabel("2 Courses");
+		JLabel lblNewLabel_13 = new JLabel("Courses");
 		lblNewLabel_13.setFont(new Font("Times New Roman", Font.BOLD, 25));
-		lblNewLabel_13.setBounds(68, 40, 181, 67);
+		lblNewLabel_13.setBounds(68, 21, 122, 67);
 		panel_5.add(lblNewLabel_13);
+		
+		JLabel lblNewLabel_12_1_1 = new JLabel("");
+		lblNewLabel_12_1_1.setFont(new Font("Times New Roman", Font.BOLD, 25));
+		lblNewLabel_12_1_1.setBounds(64, 69, 109, 67);
+		panel_5.add(lblNewLabel_12_1_1);
+		int courseCount = getCourseCount();
+        lblNewLabel_12_1_1.setText(Integer.toString(courseCount));
+		
 	}
+	
+	  private int getStudentCount() {
+	        int studentCount = 0;
 
+	        // JDBC connection parameters
+	    	String Username = "root";
+	    	String Passwords = "";
+	    	String url = "jdbc:mysql://localhost:3306/cms";
+
+	        // JDBC variables
+	        Connection connection = null;
+	        PreparedStatement preparedStatement = null;
+	        ResultSet resultSet = null;
+
+	        try {
+	            // Connect to the database
+	            connection = DriverManager.getConnection(url, Username, Passwords);
+
+	            // SQL query to get the count of students
+	            String query = "SELECT COUNT(*) FROM addstudent";
+	            preparedStatement = connection.prepareStatement(query);
+	            resultSet = preparedStatement.executeQuery();
+
+	            // Retrieve the count from the result set
+	            if (resultSet.next()) {
+	                studentCount = resultSet.getInt(1);
+	            }
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        } finally {
+	            // Close JDBC resources in the reverse order of their creation
+	            try {
+	                if (resultSet != null) resultSet.close();
+	                if (preparedStatement != null) preparedStatement.close();
+	                if (connection != null) connection.close();
+	            } catch (SQLException e) {
+	                e.printStackTrace();
+	            }
+	        }
+
+	        return studentCount;
+	    }
+	  
+	    private int getTeacherCount() {
+	        int teacherCount = 0;
+
+	        // JDBC connection parameters
+	    	String Username = "root";
+	    	String Passwords = "";
+	    	String url = "jdbc:mysql://localhost:3306/cms";
+
+	        // JDBC variables
+	        Connection connection = null;
+	        PreparedStatement preparedStatement = null;
+	        ResultSet resultSet = null;
+
+	        try {
+	            // Connect to the database
+	            connection = DriverManager.getConnection(url, Username, Passwords );
+
+	            // SQL query to get the count of teachers
+	            String query = "SELECT COUNT(*) FROM addeacher";
+	            preparedStatement = connection.prepareStatement(query);
+	            resultSet = preparedStatement.executeQuery();
+
+	            // Retrieve the count from the result set
+	            if (resultSet.next()) {
+	                teacherCount = resultSet.getInt(1);
+	            }
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        } finally {
+	            // Close JDBC resources in the reverse order of their creation
+	            try {
+	                if (resultSet != null) resultSet.close();
+	                if (preparedStatement != null) preparedStatement.close();
+	                if (connection != null) connection.close();
+	            } catch (SQLException e) {
+	                e.printStackTrace();
+	            }
+	        }
+
+	        return teacherCount;
+	    }
+	    
+	    private int getCourseCount() {
+	        int courseCount = 0;
+
+	        // JDBC connection parameters
+	    	String Username = "root";
+	    	String Passwords = "";
+	    	String url = "jdbc:mysql://localhost:3306/cms";
+
+	        // JDBC variables
+	        Connection connection = null;
+	        PreparedStatement preparedStatement = null;
+	        ResultSet resultSet = null;
+
+	        try {
+	            // Connect to the database
+	        	 connection = DriverManager.getConnection(url, Username, Passwords );
+
+	            // SQL query to get the count of courses
+	            String query = "SELECT COUNT(*) FROM addcourse";
+	            preparedStatement = connection.prepareStatement(query);
+	            resultSet = preparedStatement.executeQuery();
+
+	            // Retrieve the count from the result set
+	            if (resultSet.next()) {
+	                courseCount = resultSet.getInt(1);
+	            }
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        } finally {
+	            // Close JDBC resources in the reverse order of their creation
+	            try {
+	                if (resultSet != null) resultSet.close();
+	                if (preparedStatement != null) preparedStatement.close();
+	                if (connection != null) connection.close();
+	            } catch (SQLException e) {
+	                e.printStackTrace();
+	            }
+	        }
+
+	        return courseCount;
+	    }
 }
